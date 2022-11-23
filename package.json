@@ -1,18 +1,19 @@
 {
-  "name": "umi-action",
+  "name": "vue-smart-antdv",
   "version": "1.0.0",
-  "description": "react umi action",
+  "description": "vue antdv form",
   "type": "module",
   "author": "tvsqzyb",
   "license": "MIT",
   "keyword": [
-    "umi",
-    "react"
+    "vue",
+    "antdv",
+    "form"
   ],
   "homepage": ".",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zuniversal/umi-action"
+    "url": "https://github.com/zuniversal/vue-smart-antdv"
   },
   "files": [
     "build"
