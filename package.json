@@ -1,6 +1,6 @@
 {
   "name": "vue-smart-antdv",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "vue antdv form",
   "type": "module",
   "author": "tvsqzyb",
@@ -16,7 +16,9 @@
     "url": "https://github.com/zuniversal/vue-smart-antdv"
   },
   "files": [
-    "build"
+    "build",
+    "dist",
+    "src"
   ],
   "main": "src/index.js",
   "module": "src/index.js",
