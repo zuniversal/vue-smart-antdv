@@ -1,5 +1,6 @@
 import { defineComponent, reactive, isVNode, ref, computed, toRefs } from 'vue';
 import Vue from 'vue';
+import moment from 'moment';
 // import { getLabel, defProps, rules, comDefProps, } from './config'//
 import * as formConfigs from './config'; //
 // export { default as config } from './config'//

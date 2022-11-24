@@ -434,13 +434,16 @@ const useFormConfig = useForm()
 
 ```js
   // 全部引入
-  import * as config from 'vue-smart-antdv/config'
-  // 或者部分引入需要修改的配置
-  import { 需要的配置项 } from 'vue-smart-antdv/config'
+  import * as SmartAntd from 'vue-smart-antdv'
+  SmartAntd.(comDefProps、getLabel、rules)
+  // 或者按需引入 部分需要修改的配置
+  import { 需要的配置项() } from 'vue-smart-antdv'
 
 
-  // 自定义修改后要显示的配置
-  const 自定义的配置项 = ...
+  // 自定义修改后要显示的配置 或者部分修改
+  const 自定义的配置项 = {
+    ...comDefProps,
+  }
 
 
   // vue 修改配置vue
@@ -474,7 +477,7 @@ const getRes = () => {
 <SmartForm ref={formRef} config={dataConfig} init={formState}></SmartForm>
 ```
 
-## 主要配置参数
+#### 主要配置参数
 ```
   name: {// 组件name
     type: String,
