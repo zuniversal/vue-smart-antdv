@@ -1,6 +1,5 @@
 import { defineComponent, reactive, isVNode, ref, computed, toRefs } from 'vue';
 import Vue from 'vue';
-import moment from 'moment';
 // import { getLabel, defProps, rules, comDefProps, } from './config'//
 import * as formConfigs from './config'; //
 // export { default as config } from './config'//
@@ -53,36 +52,37 @@ export default defineComponent({
       noLabelLayout,
     } = props;
 
+    const formStateObj = {
+      xxxxxxxxxxxxxx: '其它属性',
+      customCom: 'CustomComzyb',
+      formItemInput: 888,
+      text: 'texttexttext',
+      radioGroup2: 'b',
+
+      input: '15160208606',
+      inputNumber: 8,
+      password: '666666',
+      textarea: 'textarea888',
+      select: '业务员',
+      search: ['业务员'],
+      switch: false,
+      radio: 'b',
+      radioGroup: 'b',
+      checkbox: ['a', 'b'],
+      // datePicker: undefined,
+      // monthPicker: undefined,
+      // rangePicker: undefined,
+      rate: 2.5,
+      slider: 80,
+      cascader: ['zhejiang', 'hangzhou', 'xihu'],
+      autoComplete: 'Downing Street',
+      treeSelect: ['tree2'],
+    };
+    const formState = reactive(init);
+
     const formRef = ref();
     ctx.expose({ formRef });
     console.log(' SmartForm formRef ： ', formRef); //
-
-    const formStateObj = {
-      // 'input-number': 3,
-      // 'checkbox-group': ['A', 'B'],
-      // rate: 3.5,
-      // select: 'china',
-      // selectMultiple: ['red', 'green'],
-
-      customcom: 'CustomComzyb22',
-      info: 'zyb',
-      info: 999,
-      company: ['业务员'],
-      formItemIn: 333,
-      radioGroup2: 'b',
-      checkboxGroup: ['E', 'F'],
-      inputNumber: 3,
-      radioButton: 'b',
-      radioGroup: 'b',
-      rate: 2.5,
-      select: 'usa',
-      selectMultiple: ['red', 'green'],
-      slider: 36,
-      switch: true,
-      placeholder: 'Please select favourite colors',
-      placeholder: 'zzz',
-    };
-    const formState = reactive(init);
 
     const getData = () => {
       console.log(' getData   ,   ： ', formState);
@@ -484,6 +484,17 @@ export default defineComponent({
           {formItems.value}
 
           {ctx.slots.bottomSlot?.()}
+
+          <a-button
+            type="primary"
+            onClick={() => {
+              console.log(' propsFn ： ', props, props.eventAttr, formState);
+              // props.propsFn({name: 'zyb', })
+              props.eventAttr.propsFn({ name: 'zyb' });
+            }}
+          >
+            propsFn
+          </a-button>
 
           <a-form-item wrapper-col={{ span: 12, offset: 6 }}>
             <a-button type="primary" htmlType="submit" html-type="submit">

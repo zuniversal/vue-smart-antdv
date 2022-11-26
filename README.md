@@ -4,9 +4,10 @@
 ## 组件说明
 
 ```
- 基于 Ant-Design-Vue 组件的上层简化封装。
- SmartForm 智能表单组件 实现数据动态配置化生成组件，支持普通数据格式、组件混合配置及以hooks形式配置，实现配置与组件的分离、复用。智能快速生成对应表单，并支持自定义显示修改表单项内容
+ 基于 Ant-Design-Vue/Elment-plus 组件的上层简化封装，抹平平台代码差异，只需关注组件的业务实现，组件一切原有api依旧支持。
+ SmartForm 智能表单组件 实现数据动态配置化生成组件，支持普通数据格式、组件混合配置及以hooks形式配置，实现配置与组件的分离、复用。智能快速生成对应表单，并支持自定义显示修改表单项内容，供项目使用。
 ```
+
 
 ## Getting Started
 
@@ -14,13 +15,126 @@ Install dependencies,
 
 ```bash
 $ npm i vue-smart-antdv
+
+$ yarn add vue-smart-antdv
+```
+
+
+#### 使用例子在源码包里的 examples 目录下 
+  * [JSX](https://github.com/zuniversal/vue-smart-antdv/blob/master/examples/DemoJsx.jsx)
+  * [VUE](https://github.com/zuniversal/vue-smart-antdv/blob/master/examples/Demo.vue)
+
+
+#### SmartForm 基于 Ant-Design-Vue SmartFormEl 基于 Elment-plus 可根据项目业务选择性使用对应组件
+
+```
+  import { SmartForm, SmartFormEl } from 'vue-smart-antdv'
+```
+
+
+#### 主要配置参数 支持透传使用全部的 Form 组件相关属性 参数
+
+```
+  formType: 指定使用的Form表单元组件元素 不传默认使用Input组件
+  formProps: 组件 Form 的所有 props 都会被透传给 Form 组件
+  itemProps: 透传配置给 form-item 
+  comProps: 透传配置给 form-item 内的对应表单，如 Input、Select 等元素
+```
+
+
+#### 最简单的使用方式 如下配置即可生成一个 Input 组件的表单元素
+
+```jsx
+const dataConfig = [
+ {
+    itemProps: {
+      label: 'label文本',
+      name: 'input',
+    },
+  },
+]
+
+// jsx
+<SmartForm config={dataConfig} init={formState}></SmartForm>
+
+// vue
+<SmartForm :config='dataConfig' :init='formState'></SmartForm>
+```
+
+
+#### 主要配置参数 支持透传使用全部的 Form 组件相关属性 参数
+
+```
+  name: {// 组件name
+    type: String,
+    default: 'smartForm',
+  },
+  config: {// 组件formItem配置
+    type: Array,
+    default: [],
+  },
+  formProps: {// 组件 Form props
+    type: Object,
+    default: {},
+  },
+  formItemLayout: {// 组件 Form 布局
+    type: Object,
+    default: {
+      labelCol: { span: 6 },
+      wrapperCol: { span: 14 },
+    },
+  },
+  init: {// 组件 初始数据值
+    type: Object,
+    default: {},
+  },
+  isDisabledAll: {// 是否禁用整个表单
+    type: Boolean,
+    default: false,
+  },
+  noRuleAll: {// 是否关闭整个表单rule校验
+    type: Boolean,
+    default: false,
+  },
 ```
 
 
 #### 普通数据配置数据源 
 
 ```js
-const dataConfig = [
+const treeData = [
+  {
+    title: 'tree1',
+    value: 'tree1',
+    id: 'tree1',
+    children: [
+      {
+        title: 'tree1-1',
+        value: 'tree1-1',
+        id: 'tree1-1',
+        children: [
+          {
+            title: 'tree1-1-1',
+            value: 'tree1-1-1',
+            id: 'tree1-1-1',
+          },
+          {
+            title: 'tree1-1-2',
+            value: 'tree1-1-2',
+            id: 'tree1-1-2',
+          },
+        ],
+      },
+      {
+        title: 'tree2',
+        value: 'tree2',
+        id: 'tree2',
+      },
+    ],
+  },
+]
+
+export const dataConfig = [
   {
     formType: 'Divider',
     comProps: {
@@ -99,6 +213,7 @@ const dataConfig = [
     },
     comProps: {
       mode: "multiple",
+      multiple: true, // el
       options : [
         {
           label: '客户',
@@ -270,37 +385,14 @@ const dataConfig = [
       name: 'treeSelect',
     },
     comProps: {
-      treeData: [
-        {
-          title: 'parent 1',
-          value: 'parent 1',
-          children: [
-            {
-              title: 'parent 1-0',
-              value: 'parent 1-0',
-              children: [
-                {
-                  title: 'my leaf',
-                  value: 'leaf1',
-                },
-                {
-                  title: 'your leaf',
-                  value: 'leaf2',
-                },
-              ],
-            },
-            {
-              title: 'parent 1-1',
-              value: 'parent 1-1',
-            },
-          ],
-        },
-      ]
+      treeData,
+      data: treeData,
     },
   },
 ]
 
 ```
+
 
 #### 组件直接传入 普通数据配置数据源 引入、调用 
 
@@ -311,6 +403,7 @@ const useFormConfig = useForm()
 
 <SmartForm {...props} config={dataConfig} init={formState}></SmartForm>
 ```
+
 
 #### jsx hooks 式配置使用
 
@@ -398,7 +491,8 @@ export default useForm;
 
 ```
 
-#### vue hooks 式配置使用
+
+#### jsx hooks 式配置使用
 
 ```vue
 import { SmartForm } from 'vue-smart-antdv'
@@ -412,6 +506,7 @@ export default defineComponent({
   }
 });
 ```
+
 
 #### vue hooks template 式配置使用
 
@@ -427,31 +522,32 @@ const useFormConfig = useForm()
 
 
 #### 显示效果
-![image](https://raw.githubusercontent.com/zuniversal/testmd/blob/master/assets/ui.png)
+![image](https://raw.githubusercontent.com/zuniversal/vue-smart-antdv/blob/master/assets/ui.png)
 
 
 #### 支持修改SmartForm内部定义配置 目前支持：  comDefProps、getLabel、rules
 
 ```js
-  // 全部引入
-  import * as SmartAntd from 'vue-smart-antdv'
-  SmartAntd.(comDefProps、getLabel、rules)
-  // 或者按需引入 部分需要修改的配置
-  import { 需要的配置项() } from 'vue-smart-antdv'
+// 全部引入
+import * as SmartAntd from 'vue-smart-antdv'
+SmartAntd.(comDefProps、getLabel、rules)
+// 或者按需引入 部分需要修改的配置
+import { 需要的配置项 } from 'vue-smart-antdv'
 
 
-  // 自定义修改后要显示的配置 或者部分修改
-  const 自定义的配置项 = {
-    ...comDefProps,
-  }
+// 自定义修改后要显示的配置 或者部分修改
+const 自定义的配置项 = {
+  ...comDefProps,
+}
 
 
-  // vue 修改配置vue
-  <SmartForm :配置项='自定义的配置项' :config='useFormConfig' :init='formState'></SmartForm>
-  
-  // vue 修改配置vue
-  <SmartForm 配置项={自定义的配置项} config={dataConfig} init={formState}></SmartForm>
+// vue 修改配置vue
+<SmartForm :配置项='自定义的配置项' :config='dataConfig' :init='formState'></SmartForm>
+
+// jsx 修改配置vue
+<SmartForm 配置项={自定义的配置项} config={dataConfig} init={formState}></SmartForm>
 ```
+
 
 #### 其它配置 支持传入顶部、底部 slots
 
@@ -464,6 +560,27 @@ const slotsCom = {
 <SmartForm config={dataConfig} init={formState}>{slotsCom}</SmartForm>
 ```
 
+
+#### 父组件的事件统一存储放到 eventAttr 对象传递给子组件 SmartForm
+
+```jsx
+const propsFn = (params) => {
+  console.log(' propsFn   ,   ： ', params,  )
+  // 父组件相关代码操作
+}
+
+const eventAttr = {
+  propsFn,
+}
+
+// jsx
+<SmartForm eventAttr={eventAttr} config={dataConfig} init={formState}></SmartForm>
+
+// vue
+<SmartForm :eventAttr='eventAttr :config='dataConfig' :init='formState'></SmartForm>
+```
+
+
 #### 支持ref获取组件实例 
 
 ```jsx
@@ -475,46 +592,6 @@ const getRes = () => {
 }
 
 <SmartForm ref={formRef} config={dataConfig} init={formState}></SmartForm>
-```
-
-#### 主要配置参数
-```
-  name: {// 组件name
-    type: String,
-    default: 'smartForm',
-  },
-  config: {// 组件formItem配置
-    type: Array,
-    default: [],
-  },
-  formProps: {// 组件 Form props
-    type: Object,
-    default: {},
-  },
-  formItemLayout: {// 组件 Form 布局
-    type: Object,
-    default: {
-      labelCol: { span: 6 },
-      wrapperCol: { span: 14 },
-    },
-  },
-  init: {// 组件 初始数据值
-    type: Object,
-    default: {},
-  },
-  isDisabledAll: {// 是否禁用整个表单
-    type: Boolean,
-    default: false,
-  },
-  noRuleAll: {// 是否关闭整个表单rule校验
-    type: Boolean,
-    default: false,
-  },
-```
-
-```
- 基于 Ant-Design-Vue 组件的上层简化封装。
- SmartForm 智能表单组件 实现数据动态配置化生成组件，支持普通数据格式、组件混合配置及以hooks形式配置，实现配置与组件的分离、复用。智能快速生成对应表单，并支持自定义显示修改表单项内容
 ```
 
 #### 其它参数详细作用请查看 vue-smart-antdv/config 内的 defProps

@@ -1,14 +1,16 @@
 {
   "name": "vue-smart-antdv",
-  "version": "1.0.5",
-  "description": "vue antdv form",
+  "version": "1.0.6",
+  "description": "vue ant-design-vue element form component",
   "type": "module",
   "author": "tvsqzyb",
   "license": "MIT",
-  "keyword": [
+  "keywords": [
     "vue",
-    "antdv",
-    "form"
+    "ant-design-vue",
+    "element",
+    "form",
+    "component"
   ],
   "homepage": ".",
   "repository": {
@@ -16,15 +18,18 @@
     "url": "https://github.com/zuniversal/vue-smart-antdv"
   },
   "files": [
+    "assets",
     "build",
-    "lib",
     "dist",
+    "lib",
+    "examples",
+    "packages",
     "src"
   ],
   "main": "lib/smart.umd.js",
   "scripts": {
-    "buildm": "vue-cli-service build --target lib --name smart --dest lib --entry ./src/main.js",
-    "build": "vue-cli-service build --target lib --name smart --dest lib --entry ./src/index.js",
+    "buildm": "vue-cli-service build --target lib --name smart --dest lib --entry ./packages/main.js",
+    "build": "vue-cli-service build --target lib --name smart --dest lib --entry ./packages/index.js",
     "vbuild": "vite build --outDir dist/index",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'"
   },
@@ -50,13 +55,12 @@
     "@vue/cli-plugin-vuex": "~4.5.15",
     "@vue/cli-service": "~4.5.15",
     "@vue/compiler-sfc": "^3.0.0",
-    "ant-design-vue": "^3.2.12",
     "babel-polyfill": "^6.26.0",
+    "uglifyjs-webpack-plugin": "^2.2.0",
     "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
     "vite": "^3.2.3",
     "vite-plugin-compression": "^0.5.1",
-    "vue": "^3.0.0",
     "yorkie": "^2.0.0"
   },
   "browserslist": {
@@ -72,6 +76,9 @@
     ]
   },
   "dependencies": {
-    "uglifyjs-webpack-plugin": "^2.2.0"
+    "ant-design-vue": "^3.2.12",
+    "@element-plus/icons": "^0.0.11",
+    "element-plus": "^2.2.25",
+    "vue": "^3.0.0"
   }
 }

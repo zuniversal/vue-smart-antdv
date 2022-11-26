@@ -4,6 +4,11 @@ import Vue from 'vue';
 import * as formConfigs from './config'; //
 // export { default as config } from './config'//
 // console.log(' formConfigs ： ', formConfigs,  )//
+import {
+  renderSelectItem,
+  renderRadioItem,
+  renderCheckboxItem,
+} from './config'; //
 
 const bounceIn = '';
 
@@ -52,36 +57,37 @@ export default defineComponent({
       noLabelLayout,
     } = props;
 
-    const formRef = ref();
-    ctx.expose({ formRef });
-    console.log(' SmartForm formRef ： ', formRef); //
-
     const formStateObj = {
-      // 'input-number': 3,
-      // 'checkbox-group': ['A', 'B'],
-      // rate: 3.5,
-      // select: 'china',
-      // selectMultiple: ['red', 'green'],
-
-      customcom: 'CustomComzyb22',
-      info: 'zyb',
-      info: 999,
-      company: ['业务员'],
-      formItemIn: 333,
+      xxxxxxxxxxxxxx: '其它属性',
+      customCom: 'CustomComzyb',
+      formItemInput: 888,
+      text: 'texttexttext',
       radioGroup2: 'b',
-      checkboxGroup: ['E', 'F'],
-      inputNumber: 3,
-      radioButton: 'b',
+
+      input: '15160208606',
+      inputNumber: 8,
+      password: '666666',
+      textarea: 'textarea888',
+      select: '业务员',
+      search: ['业务员'],
+      switch: false,
+      radio: 'b',
       radioGroup: 'b',
+      checkbox: ['a', 'b'],
+      // datePicker: undefined,
+      // monthPicker: undefined,
+      // rangePicker: undefined,
       rate: 2.5,
-      select: 'usa',
-      selectMultiple: ['red', 'green'],
-      slider: 36,
-      switch: true,
-      placeholder: 'Please select favourite colors',
-      placeholder: 'zzz',
+      slider: 80,
+      cascader: ['zhejiang', 'hangzhou', 'xihu'],
+      autoComplete: 'Downing Street',
+      treeSelect: ['tree2'],
     };
     const formState = reactive(init);
+
+    const formRef = ref();
+    ctx.expose({ formRef });
+    console.log(' SmartForm formRef ： ', formRef, formState); //
 
     const getData = () => {
       console.log(' getData   ,   ： ', formState);
@@ -149,17 +155,17 @@ export default defineComponent({
           if (isString) {
             // console.log(' 普通dom ： ', item   )//
             return (
-              <a-form-item label="  " {...item.comProps} colon={false}>
+              <el-form-item label="  " {...item.comProps} colon={false}>
                 {item}
-              </a-form-item>
+              </el-form-item>
             );
           }
           if (isCustomCom) {
             // console.log(' 普通 isCustomCom ： ', item   )//
             return (
-              <a-form-item label="  " {...item.itemProps} colon={false}>
+              <el-form-item label="  " {...item.itemProps} colon={false}>
                 {item.children({ formState })}
-              </a-form-item>
+              </el-form-item>
             );
           }
         }
@@ -220,6 +226,7 @@ export default defineComponent({
         const formItemCommonProps = {
           colon: false,
           ...itemProps,
+          prop: itemProps.name,
         };
 
         if (noLabel) {
@@ -330,131 +337,119 @@ export default defineComponent({
             </span>
           ),
           Divider: (
-            <a-divider {...realComProps}>{realComProps?.children}</a-divider>
+            <el-divider {...realComProps}>{realComProps?.children}</el-divider>
           ),
           // Divider: <span class={`plainText`} {...comProps}>xxxxxxxxxxx</span>,
           Input: (
-            <a-input
-              {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
-            />
+            <el-input {...realComProps} vModel={formState[itemProps.name]} />
           ),
           InputNumber: (
-            <a-input-number
+            <el-input-number
               {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
+              vModel={formState[itemProps.name]}
             />
           ),
           Password: (
-            <a-input-password
-              {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
-            />
+            <el-input {...realComProps} vModel={formState[itemProps.name]} />
           ),
           TextArea: (
-            <a-textarea
-              {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
-            />
+            <el-input {...realComProps} vModel={formState[itemProps.name]} />
           ),
           Select: (
-            <a-select
-              {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
-            ></a-select>
+            <el-select {...realComProps} vModel={formState[itemProps.name]}>
+              {renderSelectItem(realComProps)}
+            </el-select>
           ),
           Search: (
-            <a-select
-              {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
-            ></a-select>
+            <el-select {...realComProps} vModel={formState[itemProps.name]}>
+              {renderSelectItem(realComProps)}
+            </el-select>
           ),
           Switch: (
-            <a-switch
-              {...realComProps}
-              vModel={[formState[itemProps.name], 'checked']}
-            />
+            <el-switch {...realComProps} vModel={formState[itemProps.name]} />
           ),
           Radio: (
-            <a-radio-group
+            <el-radio-group
               {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
-            ></a-radio-group>
+              vModel={formState[itemProps.name]}
+            >
+              {renderRadioItem(realComProps)}
+            </el-radio-group>
           ),
           Checkbox: (
-            <a-checkbox-group
+            <el-checkbox-group
               {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
-            ></a-checkbox-group>
+              vModel={formState[itemProps.name]}
+            >
+              {renderCheckboxItem(realComProps)}
+            </el-checkbox-group>
           ),
           CheckboxItem: (
-            <a-checkbox
-              {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
-            />
+            <el-checkbox {...realComProps} vModel={formState[itemProps.name]} />
           ),
           DatePicker: (
-            <a-date-picker
+            <el-date-picker
               {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
+              vModel={formState[itemProps.name]}
             />
           ),
           MonthPicker: (
-            <a-date-picker
+            <el-date-picker
               {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
+              vModel={formState[itemProps.name]}
             />
           ),
           RangePicker: (
-            <a-range-picker
+            <el-date-picker
               {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
+              vModel={formState[itemProps.name]}
             />
           ),
           Rate: (
-            <a-rate
+            <el-rate
               {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
-            ></a-rate>
+              vModel={formState[itemProps.name]}
+            ></el-rate>
           ),
           Slider: (
-            <a-slider
+            <el-slider
               {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
-            ></a-slider>
+              vModel={formState[itemProps.name]}
+            ></el-slider>
           ),
           Cascader: (
-            <a-cascader
-              {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
-            />
+            <el-cascader {...realComProps} vModel={formState[itemProps.name]} />
           ),
           AutoComplete: (
-            <a-auto-complete
+            <el-autocomplete
               {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
+              vModel={formState[itemProps.name]}
             >
-              <a-input />
-            </a-auto-complete>
+              <el-input />
+            </el-autocomplete>
           ),
           TreeSelect: (
-            <a-tree-select
+            <el-tree-select
               {...realComProps}
               vModel={[formState[itemProps.name], 'value']}
-            ></a-tree-select>
+            ></el-tree-select>
           ),
         };
-        // console.log(' realComProps ： ', realComProps,  )//
+        console.log(
+          ' realComProps, formItemProps ： ',
+          realComProps,
+          formItemProps,
+        ); //
 
         const formItemCom = formItemMap[formType];
-        // return <a-form-item name={`x${Math.random()}`} rules={[{ required: true, message: 'Please pick an item!' }]} label="Radio.Group">
-        //   <a-radio-group >
-        //     <a-radio value="a">item 1</a-radio>
-        //     <a-radio value="b">item 2</a-radio>
-        //     <a-radio value="c">item 3</a-radio>
-        //   </a-radio-group>
-        // </a-form-item>
-        return <a-form-item {...formItemProps}>{formItemCom}</a-form-item>;
+        // return <el-form-item name={`x${Math.random()}`} rules={[{ required: true, message: 'Please pick an item!' }]} label="Radio.Group">
+        //   <el-radio-group >
+        //     <el-radio value="a">item 1</el-radio>
+        //     <el-radio value="b">item 2</el-radio>
+        //     <el-radio value="c">item 3</el-radio>
+        //   </el-radio-group>
+        // </el-form-item>
+        return <el-form-item {...formItemProps}>{formItemCom}</el-form-item>;
       });
 
       return formItems;
@@ -462,10 +457,25 @@ export default defineComponent({
 
     console.log(' formItems ： ', formItems); //
 
+    const submitForm = formEl => {
+      console.log(' submitForm ： ', formEl); //
+      if (!formEl) return;
+      formEl.value.validate(valid => {
+        console.log(' valid ： ', valid); //
+        if (valid) {
+          console.log('submit!');
+        } else {
+          console.log('error submit!');
+          return false;
+        }
+      });
+    };
+
     return () => {
       // v-bind={formItemLayout} 注意 如果使用了不支持存在的指令会导致报错  Uncaught (in promise) TypeError: Cannot read property 'deep' of undefined
       return (
-        <a-form
+        <el-form
+          label-width="200px"
           model={formState}
           // model={model}
           ref={formRef}
@@ -484,12 +494,28 @@ export default defineComponent({
 
           {ctx.slots.bottomSlot?.()}
 
-          <a-form-item wrapper-col={{ span: 12, offset: 6 }}>
-            <a-button type="primary" htmlType="submit" html-type="submit">
+          <el-button
+            type="primary"
+            onClick={() => {
+              console.log(' propsFn ： ', props, props.eventAttr, formState);
+              // props.propsFn({name: 'zyb', })
+              props.eventAttr.propsFn({ name: 'zyb' });
+            }}
+          >
+            propsFn
+          </el-button>
+
+          <el-form-item wrapper-col={{ span: 12, offset: 6 }}>
+            <el-button
+              type="primary"
+              onClick={() => {
+                submitForm(formRef);
+              }}
+            >
               Submit
-            </a-button>
-          </a-form-item>
-        </a-form>
+            </el-button>
+          </el-form-item>
+        </el-form>
       );
     };
   },

@@ -17,6 +17,7 @@ export const comDefProps = ({ formType }) => {
     },
     TextArea: {
       allowClear: true,
+      type: 'textarea',
       // autoSize: {
       //   minRows: 4,
       //   // maxRows: 5
@@ -24,7 +25,10 @@ export const comDefProps = ({ formType }) => {
     },
     Select: {},
     Search: {},
-    Password: {},
+    Password: {
+      type: 'password',
+      'show-password': true,
+    },
     Cascader: {},
     Radio: {},
     Checkbox: {},
@@ -34,6 +38,7 @@ export const comDefProps = ({ formType }) => {
       picker: 'month',
     },
     RangePicker: {
+      type: 'daterange',
       format: 'YYYY/MM/DD',
       // ranges: {
       //   今天: [moment(), moment()],
@@ -278,3 +283,22 @@ export const defProps = {
     default: false,
   },
 };
+
+export const renderSelectItem = ({ options }) =>
+  options?.map(item => (
+    <el-option key={item.value} {...item} label={item.value}>
+      {item.label}
+    </el-option>
+  ));
+export const renderRadioItem = ({ options }) =>
+  options?.map(item => (
+    <el-radio key={item.value} {...item} label={item.value}>
+      {item.label}
+    </el-radio>
+  ));
+export const renderCheckboxItem = ({ options }) =>
+  options?.map(item => (
+    <el-checkbox key={item.value} {...item} label={item.value}>
+      {item.label}
+    </el-checkbox>
+  ));
