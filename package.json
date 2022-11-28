@@ -1,7 +1,7 @@
 {
   "name": "vue-smart-antdv",
-  "version": "1.0.6",
-  "description": "vue ant-design-vue element form component",
+  "version": "1.0.8",
+  "description": "vue ant-design-vue element form smart register custom component",
   "type": "module",
   "author": "tvsqzyb",
   "license": "MIT",
@@ -10,6 +10,8 @@
     "ant-design-vue",
     "element",
     "form",
+    "smart",
+    "custom",
     "component"
   ],
   "homepage": ".",

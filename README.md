@@ -5,7 +5,8 @@
 
 ```
  基于 Ant-Design-Vue/Elment-plus 组件的上层简化封装，抹平平台代码差异，只需关注组件的业务实现，组件一切原有api依旧支持。
- SmartForm 智能表单组件 实现数据动态配置化生成组件，支持普通数据格式、组件混合配置及以hooks形式配置，实现配置与组件的分离、复用。智能快速生成对应表单，并支持自定义显示修改表单项内容，供项目使用。
+ SmartForm 智能表单组件 实现数据动态配置化生成组件，支持普通数据格式、组件混合配置及以hooks形式配置，以及自定义注册一套符合自己系统的FormType组件显示，实现配置与组件的分离、复用。
+ 智能快速生成对应表单，并支持自定义显示修改表单项内容，供项目使用。
 ```
 
 
@@ -521,6 +522,109 @@ const useFormConfig = useForm()
 ```
 
 
+#### 自定义注册一套符合自己系统的FormType组件显示
+ 
+```jsx
+import { ref, defineComponent, reactive, } from 'vue';
+import { SmartForm } from 'vue-smart-antdv'// 
+
+// 注意 需要写成如下组件形式 才能有自己的数据值 改变值才可以起效
+const CountComp = defineComponent({
+  setup(props, ctx) {
+    const count = ref(0)
+    const add = () => {
+      count.value++
+    }
+    return () => {
+      return <button onClick={add}>{count.value}</button>
+    } 
+  }
+});
+
+const SmartFormCustom = (props) => {
+  // 自定义注册组件内容，函数形式 接收 formState 对应Form组件的model数据 可自行绑定 或 使用数据进行展示
+  const registerComp = ({formState}) => {
+    return ({
+      CustomTextFormItem: <div className={`CustomFormItem`}>
+        CustomFormItem 自定义显示组件元素 - {formState.input} 
+      </div>,
+      CustomCountFormItem: <div className={`CustomFormItem`}>
+        CustomFormItem 自定义显示组件元素 - {formState.password} - <CountComp></CountComp>
+      </div>,
+    }) 
+  }
+  return <SmartForm {...props} registerComp={registerComp}></SmartForm>  
+}
+
+export default defineComponent({
+  setup(props, ctx) {
+    return () => {
+      const formStateObj = {
+        input: "15160208606",
+        password: "666666",
+      }
+      const formState = reactive(formStateObj);
+
+      const config = ({formState}) => [
+        {
+          noRule: true,  
+          formType: 'CustomTextFormItem',
+          itemProps: {
+            label: 'CustomTextFormItem',
+            name: 'CustomTextFormItem',
+          },
+          comProps: {
+          },
+        },
+        {
+          noRule: true,  
+          formType: 'CustomCountFormItem',
+          itemProps: {
+            label: 'CustomCountFormItem',
+            name: 'CustomCountFormItem',
+          },
+          comProps: {
+          },
+        },
+        {
+          noRule: true,  
+          formType: 'CustomCountFormItem',
+          itemProps: {
+            label: 'CustomCountFormItem2',
+            name: 'CustomCountFormItem2',
+          },
+          comProps: {
+          },
+        },
+        {
+          itemProps: {
+            label: 'input',
+            name: 'input',
+          },
+          comProps: {
+          },
+        },
+        {
+          formType: 'Password',
+          itemProps: {
+            label: 'password',
+            name: 'password',
+          },
+          comProps: {
+          },
+        },
+      ]
+
+      return <SmartFormCustom config={config} init={formState}></SmartFormCustom>
+    } 
+  }
+});
+```
+
+#### 自定义注册FormType组件例子
+  * [JSX](https://github.com/zuniversal/vue-smart-antdv/blob/master/examples/SmartFormCustom.jsx)
+
+
 #### 显示效果
 ![image](https://raw.githubusercontent.com/zuniversal/vue-smart-antdv/blob/master/assets/ui.png)
 
@@ -561,6 +665,20 @@ const slotsCom = {
 ```
 
 
+#### 支持ref获取组件实例 
+
+```jsx
+const formRef = ref();
+
+// 如下 formRef.value.formRef 即 Form 表单实例 可以调用相关Form组件方法
+const getRes = () => {
+  const res = formRef.value.formRef.getFieldsValue()
+}
+
+<SmartForm ref={formRef} config={dataConfig} init={formState}></SmartForm>
+```
+
+
 #### 父组件的事件统一存储放到 eventAttr 对象传递给子组件 SmartForm
 
 ```jsx
@@ -578,20 +696,6 @@ const eventAttr = {
 
 // vue
 <SmartForm :eventAttr='eventAttr :config='dataConfig' :init='formState'></SmartForm>
-```
-
-
-#### 支持ref获取组件实例 
-
-```jsx
-const formRef = ref();
-
-// 如下 formRef.value.formRef 即 Form 表单实例 可以调用相关Form组件方法
-const getRes = () => {
-  const res = formRef.value.formRef.getFieldsValue()
-}
-
-<SmartForm ref={formRef} config={dataConfig} init={formState}></SmartForm>
 ```
 
 #### 其它参数详细作用请查看 vue-smart-antdv/config 内的 defProps
