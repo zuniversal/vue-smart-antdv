@@ -158,6 +158,10 @@ export const defProps = {
     default: () => {},
   },
 
+  registerComp: {
+    type: Function,
+    default: () => {},
+  },
   eventAttr: {
     type: Object,
     default: {},

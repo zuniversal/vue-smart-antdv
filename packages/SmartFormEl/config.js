@@ -17,7 +17,6 @@ export const comDefProps = ({ formType }) => {
     },
     TextArea: {
       allowClear: true,
-      type: 'textarea',
       // autoSize: {
       //   minRows: 4,
       //   // maxRows: 5
@@ -25,10 +24,7 @@ export const comDefProps = ({ formType }) => {
     },
     Select: {},
     Search: {},
-    Password: {
-      type: 'password',
-      'show-password': true,
-    },
+    Password: {},
     Cascader: {},
     Radio: {},
     Checkbox: {},
@@ -38,7 +34,6 @@ export const comDefProps = ({ formType }) => {
       picker: 'month',
     },
     RangePicker: {
-      type: 'daterange',
       format: 'YYYY/MM/DD',
       // ranges: {
       //   今天: [moment(), moment()],
@@ -163,6 +158,10 @@ export const defProps = {
     default: () => {},
   },
 
+  registerComp: {
+    type: Function,
+    default: () => {},
+  },
   eventAttr: {
     type: Object,
     default: {},

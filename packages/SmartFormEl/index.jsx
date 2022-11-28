@@ -34,6 +34,7 @@ export default defineComponent({
 
       name,
       config,
+      registerComp,
       formProps,
       formItemLayout,
       model,
@@ -434,6 +435,7 @@ export default defineComponent({
               vModel={[formState[itemProps.name], 'value']}
             ></el-tree-select>
           ),
+          ...registerComp({ formState }),
         };
         console.log(
           ' realComProps, formItemProps ： ',
