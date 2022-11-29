@@ -1,4 +1,4 @@
-# vue project
+# Vue | Ant-Design-Vue | Elment-plus Project
 
 
 ## 组件说明
@@ -21,7 +21,7 @@ $ yarn add vue-smart-antdv
 ```
 
 
-#### 使用例子在源码包里的 examples 目录下 
+#### 使用例子如下 
   * [JSX](https://github.com/zuniversal/vue-smart-antdv/blob/master/examples/DemoJsx.jsx)
   * [VUE](https://github.com/zuniversal/vue-smart-antdv/blob/master/examples/Demo.vue)
 
@@ -60,43 +60,6 @@ const dataConfig = [
 
 // vue
 <SmartForm :config='dataConfig' :init='formState'></SmartForm>
-```
-
-
-#### 主要配置参数 支持透传使用全部的 Form 组件相关属性 参数
-
-```
-  name: {// 组件name
-    type: String,
-    default: 'smartForm',
-  },
-  config: {// 组件formItem配置
-    type: Array,
-    default: [],
-  },
-  formProps: {// 组件 Form props
-    type: Object,
-    default: {},
-  },
-  formItemLayout: {// 组件 Form 布局
-    type: Object,
-    default: {
-      labelCol: { span: 6 },
-      wrapperCol: { span: 14 },
-    },
-  },
-  init: {// 组件 初始数据值
-    type: Object,
-    default: {},
-  },
-  isDisabledAll: {// 是否禁用整个表单
-    type: Boolean,
-    default: false,
-  },
-  noRuleAll: {// 是否关闭整个表单rule校验
-    type: Boolean,
-    default: false,
-  },
 ```
 
 
@@ -676,6 +639,88 @@ const getRes = () => {
 }
 
 <SmartForm ref={formRef} config={dataConfig} init={formState}></SmartForm>
+```
+
+
+#### config 配置参数说明 支持数组和函数形式，目前函数形式带有 {formState} 参数 值是父组件传入的 form 表单初始值，可自主决定使用该数据作显示、绑定等额外操作
+
+```js
+  config: {// 组件formItem配置
+    type: Array | Function,
+    default: [],
+  },
+```
+
+
+```js
+  {
+    // 除 Form.Item 表单元素外SmartForm的扩展属性
+    flexRow: 1,// 每项元素是否独占一行显示
+    formType: 'Select',// 对应要显示的表单组件类型（可通过 registerComp 方法定制想要对应展示的元素内容）
+    noRule: false,// 是否关闭该项表单默认的 required: true, 非必填
+    ruleExtra: [{ required: true, message: '',  },],// 额外的 Form.Item 校验规则 + 表单默认的 required: true, 非必填
+    formRules: [{ required: true, message: '',  },],// 完全自定义编写 Form.Item 校验规则
+    isFormat: () => {},// 对config里的每项配置调用传入的该格式化方法处理数据
+    noLabel: false,// 不显示 label 文本
+    haveDivider: false,// 是否显示 分隔线
+    PropsCom: () => {},// Form.Item内使用父组件传入的方法创建
+    
+    // itemProps comProps 是透传 Ant-Design-Vue/Elment-plus 表单原有属性配置
+    itemProps: {// Form.Item 每项组件的属性
+      label: 'select',
+      name: 'select',
+    },
+    comProps: {// Form.Item 内部表单项的属性
+      class: 'selectClass',
+      options: [
+        {
+          label: 'car',
+          value: 'car',
+        },
+        {
+          label: 'phone',
+          value: 'phone',
+        },
+      ],
+    },
+  },
+```
+
+
+#### 主要配置参数 支持透传使用全部的 Form 组件相关属性 参数
+
+```js
+  name: {// 组件name
+    type: String,
+    default: 'smartForm',
+  },
+  config: {// 组件formItem配置
+    type: Array,
+    default: [],
+  },
+  formProps: {// 组件 Form props
+    type: Object,
+    default: {},
+  },
+  formItemLayout: {// 组件 Form 布局
+    type: Object,
+    default: {
+      labelCol: { span: 6 },
+      wrapperCol: { span: 14 },
+    },
+  },
+  init: {// 组件 初始数据值
+    type: Object,
+    default: {},
+  },
+  isDisabledAll: {// 是否禁用整个表单
+    type: Boolean,
+    default: false,
+  },
+  noRuleAll: {// 是否关闭整个表单rule校验
+    type: Boolean,
+    default: false,
+  },
 ```
 
 
