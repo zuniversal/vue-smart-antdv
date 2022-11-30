@@ -1,9 +1,6 @@
 import { defineComponent, reactive, isVNode, ref, computed, toRefs } from 'vue';
 import Vue from 'vue';
-// import { getLabel, defProps, rules, comDefProps, } from './config'//
 import * as formConfigs from './config'; //
-// export { default as config } from './config'//
-// console.log(' formConfigs ： ', formConfigs,  )//
 import {
   renderSelectItem,
   renderRadioItem,
@@ -58,50 +55,11 @@ export default defineComponent({
       noLabelLayout,
     } = props;
 
-    const formStateObj = {
-      xxxxxxxxxxxxxx: '其它属性',
-      customCom: 'CustomComzyb',
-      formItemInput: 888,
-      text: 'texttexttext',
-      radioGroup2: 'b',
-
-      input: '15160208606',
-      inputNumber: 8,
-      password: '666666',
-      textarea: 'textarea888',
-      select: '业务员',
-      search: ['业务员'],
-      switch: false,
-      radio: 'b',
-      radioGroup: 'b',
-      checkbox: ['a', 'b'],
-      // datePicker: undefined,
-      // monthPicker: undefined,
-      // rangePicker: undefined,
-      rate: 2.5,
-      slider: 80,
-      cascader: ['zhejiang', 'hangzhou', 'xihu'],
-      autoComplete: 'Downing Street',
-      treeSelect: ['tree2'],
-    };
     const formState = reactive(init);
 
     const formRef = ref();
     ctx.expose({ formRef });
-    console.log(' SmartForm formRef ： ', formRef, formState); //
 
-    const getData = () => {
-      console.log(' getData   ,   ： ', formState);
-      return formState;
-    };
-
-    // const formState = {
-    //   'input-number': 3,
-    //   'checkbox-group': ['A', 'B'],
-    //   rate: 3.5,
-    //   select: 'china',
-    //   selectMultiple: ['red', 'green'],
-    // }
     const onFinish = values => {
       console.log(
         'Success:',
@@ -111,16 +69,6 @@ export default defineComponent({
       );
       vlog('Success:', values, JSON.parse(JSON.stringify(values)));
       getFormValue(values);
-      // fetch('/', {
-      //   method: 'post',
-      //   body: JSON.stringify(values),
-      //   body: values,
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   }
-      // }).then(function(data) {
-
-      // })
     };
 
     const onFinishFailed = errorInfo => {
@@ -233,22 +181,6 @@ export default defineComponent({
         if (noLabel) {
           formItemCommonProps.label = '';
         }
-        // if (
-        //   formType === 'Radio' ||
-        //   formType === 'Switch' ||
-        //   formType === 'Checkbox'
-        // ) {
-        //   console.log(
-        //     ' formItemCommonPropsformItemCommonPropsformItemCommonProps ： ',
-        //     formType,
-        //   );
-        //   // formItemCommonProps.valuePropName = `checked`;
-        // }
-
-        // if (formType === 'Dynamic') {
-        //   console.log(' formTypeformType ： ', formItemCommonProps, formType, formType === 'Dynamic'    )//
-        //   formItemCommonProps.class = `dynamicRow ${formItemCommonProps.class}  `
-        // }
 
         const formItemDividerProps = {
           ...formItemCommonProps,
@@ -302,9 +234,6 @@ export default defineComponent({
           init: initialValues[comProps?.key],
         };
 
-        // const renderRadioOptions = renderRadioOp(radioData, opType, )
-        // const renderSelectOptions = renderSelectOp(selectData, opType, )
-
         const selectProps = {
           allowClear: true,
           filterOption: true,
@@ -323,9 +252,6 @@ export default defineComponent({
             // selectProps.onSearch = item.selectSearch
           }
         }
-        // const selectCom = (
-        //   <Select {...selectProps}>{renderSelectOp(selectData, opType)}</Select>
-        // );
 
         const vModel = formState[itemProps.name]; // 注意不能声明成变量绑定使用  Uncaught TypeError: Assignment to constant variable.
         const formItemMap = {
@@ -437,41 +363,13 @@ export default defineComponent({
           ),
           ...registerComp({ formState }),
         };
-        console.log(
-          ' realComProps, formItemProps ： ',
-          realComProps,
-          formItemProps,
-        ); //
 
         const formItemCom = formItemMap[formType];
-        // return <el-form-item name={`x${Math.random()}`} rules={[{ required: true, message: 'Please pick an item!' }]} label="Radio.Group">
-        //   <el-radio-group >
-        //     <el-radio value="a">item 1</el-radio>
-        //     <el-radio value="b">item 2</el-radio>
-        //     <el-radio value="c">item 3</el-radio>
-        //   </el-radio-group>
-        // </el-form-item>
         return <el-form-item {...formItemProps}>{formItemCom}</el-form-item>;
       });
 
       return formItems;
     });
-
-    console.log(' formItems ： ', formItems); //
-
-    const submitForm = formEl => {
-      console.log(' submitForm ： ', formEl); //
-      if (!formEl) return;
-      formEl.value.validate(valid => {
-        console.log(' valid ： ', valid); //
-        if (valid) {
-          console.log('submit!');
-        } else {
-          console.log('error submit!');
-          return false;
-        }
-      });
-    };
 
     return () => {
       // v-bind={formItemLayout} 注意 如果使用了不支持存在的指令会导致报错  Uncaught (in promise) TypeError: Cannot read property 'deep' of undefined
@@ -489,34 +387,9 @@ export default defineComponent({
         >
           {ctx.slots.topSlot?.()}
 
-          {/* {ctx.attrs.com}
-        {ctx.attrs.formItem} */}
-
           {formItems.value}
 
           {ctx.slots.bottomSlot?.()}
-
-          <el-button
-            type="primary"
-            onClick={() => {
-              console.log(' propsFn ： ', props, props.eventAttr, formState);
-              // props.propsFn({name: 'zyb', })
-              props.eventAttr.propsFn({ name: 'zyb' });
-            }}
-          >
-            propsFn
-          </el-button>
-
-          <el-form-item wrapper-col={{ span: 12, offset: 6 }}>
-            <el-button
-              type="primary"
-              onClick={() => {
-                submitForm(formRef);
-              }}
-            >
-              Submit
-            </el-button>
-          </el-form-item>
         </el-form>
       );
     };
