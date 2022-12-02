@@ -358,7 +358,7 @@ export default defineComponent({
           TreeSelect: (
             <el-tree-select
               {...realComProps}
-              vModel={[formState[itemProps.name], 'value']}
+              vModel={formState[itemProps.name]}
             ></el-tree-select>
           ),
           ...registerComp({ formState }),

@@ -43,6 +43,34 @@ $ yarn add vue-smart-antdv
 ```
 
 
+#### formType 支持显示的 Form 表单组件 自定义注册扩展组件例子在下面
+
+```js
+  rowText// 块文本
+  Label// 只显示 label 文本
+  CustomCom// 自定义显示内容组件带label
+  PlainText// 纯文本
+  Divider// 分隔线组件
+  Input// 输入框
+  InputNumber// 数字输入框
+  Password// 密码框
+  TextArea// 文本域
+  Select// 下拉框
+  Search// 搜索框
+  Switch// 开关
+  Radio// 单选框
+  Checkbox// 多选框
+  DatePicker// 让去洗澡去
+  MonthPicker// 月份选择器
+  RangePicker// 范围选择器
+  Rate// 评分
+  Slider// 滑懂输入条
+  Cascader// 级联选择请
+  AutoComplete// 自动完成
+  TreeSelect// 属性选择器
+```
+
+
 #### 最简单的使用方式 如下配置即可生成一个 Input 组件的表单元素
 
 ```jsx
@@ -375,15 +403,14 @@ const useFormConfig = useForm()
 import { ref, onMounted, } from 'vue';
 
 const useForm = (config = {}) => {
-  console.log(' useForm ： ',    )// 
   const varLabel = ref('varLabel')
   setTimeout(() => {
     varLabel.value = '动态Label'
   }, 5000)
   
-  // 当配置项里需要使用到初始数据的变量时，如 自定义formItem数据时，配置项需要写成函数式
+  // 当配置项里需要使用到初始数据的变量时，如 自定义formItem数据时，配置项需要写成函数形式 可以接收到 form 的formState数据
   return ({formState} = {formState: {}}) => ([
-    ...dataConfig,// 使用普通配置数据
+    ...dataConfig,// 复用普通数据配置
 
     {
       flexRow: 1,
@@ -417,6 +444,7 @@ const useForm = (config = {}) => {
       noRule: true,
       formType: 'CustomCom',
       CustomCom: <div>自定义组件</div>,
+      // 写成函数形式 可以接收到 form 的formState数据
       children: ({formState}) => (<>
         <div>自定义组件children</div>
         <a-form-item name="customcom" >
@@ -458,7 +486,7 @@ export default useForm;
 
 #### jsx hooks 式配置使用
 
-```vue
+```jsx
 import { SmartForm } from 'vue-smart-antdv'
 
 export default defineComponent({
@@ -523,8 +551,8 @@ export default defineComponent({
   setup(props, ctx) {
     return () => {
       const formStateObj = {
-        input: "15160208606",
-        password: "666666",
+        input: "15160208888",
+        password: "666",
       }
       const formState = reactive(formStateObj);
 
@@ -621,7 +649,19 @@ const 自定义的配置项 = {
 ```jsx
 const slotsCom = {
   topSlot: () => <div style={{textAlign: 'center'}}>父组件传递 topSlot</div>,
-  bottomSlot: () => <div style={{textAlign: 'center'}}>父组件传递 bottomSlot</div>,
+  bottomSlot: () => <div style={{textAlign: 'center'}}>
+    父组件传递 bottomSlot
+    // antd-vue 提交
+    <a-form-item wrapper-col={{ span: 12, offset: 6 }}>
+      <a-button type="primary" htmlType="submit" html-type="submit">Submit</a-button>
+    </a-form-item>
+    // 或者 el
+    <el-form-item wrapper-col={{ span: 12, offset: 6 }}>
+      <el-button type="primary" onClick={() => {
+        submitForm(formRef)
+      }}>Submit</el-button>
+    </el-form-item>
+  </div>,
 }
 
 <SmartForm config={dataConfig} init={formState}>{slotsCom}</SmartForm>
@@ -642,7 +682,7 @@ const getRes = () => {
 ```
 
 
-#### config 配置参数说明 支持数组和函数形式，目前函数形式带有 {formState} 参数 值是父组件传入的 form 表单初始值，可自主决定使用该数据作显示、绑定等额外操作
+#### config 配置参数说明 支持数组和函数形式，目前函数形式带有 {formState} 参数 值是父组件传入的 form 表单初始值，可自主决定使用该数据作额外信息显示、绑定等操作
 
 ```js
   config: {// 组件formItem配置
@@ -670,7 +710,7 @@ const getRes = () => {
       label: 'select',
       name: 'select',
     },
-    comProps: {// Form.Item 内部表单项的属性
+    comProps: {// Form.Item 内部表单项支持的各属性
       class: 'selectClass',
       options: [
         {
@@ -728,7 +768,7 @@ const getRes = () => {
 
 ```jsx
 const propsFn = (params) => {
-  console.log(' propsFn   ,   ： ', params,  )
+  console.log(' propsFn ： ', params,  )
   // 父组件相关代码操作
 }
 
@@ -743,4 +783,4 @@ const eventAttr = {
 <SmartForm :eventAttr='eventAttr :config='dataConfig' :init='formState'></SmartForm>
 ```
 
-#### 其它参数详细作用请查看 vue-smart-antdv/config 内的 defProps
+#### 其它参数详细作用请查看 packages/config 内的 defProps
