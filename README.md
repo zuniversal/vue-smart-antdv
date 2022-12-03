@@ -4,9 +4,9 @@
 ## 组件说明
 
 ```
- 基于 Ant-Design-Vue/Elment-plus 组件的上层简化封装，抹平平台代码差异，只需关注组件的业务实现，组件一切原有api依旧支持。
+ 基于 Ant-Design-Vue/Elment-plus 组件的上层简化封装，抹平平台代码差异，只需关注组件的逻辑编写，组件一切原有api依旧支持。
  SmartForm 智能表单组件 实现数据动态配置化生成组件，支持普通数据格式、组件混合配置及以hooks形式配置，以及自定义注册一套符合自己系统的FormType组件显示，实现配置与组件的分离、复用。
- 智能快速生成对应表单，并支持自定义显示修改表单项内容，供项目使用。
+ 智能快速生成对应表单，并支持自定义显示修改表单项内容、语言国际化等，供项目使用。
 ```
 
 
@@ -636,11 +636,51 @@ const 自定义的配置项 = {
 }
 
 
-// vue 修改配置vue
+// template 修改配置
 <SmartForm :配置项='自定义的配置项' :config='dataConfig' :init='formState'></SmartForm>
 
-// jsx 修改配置vue
+// jsx 修改配置
 <SmartForm 配置项={自定义的配置项} config={dataConfig} init={formState}></SmartForm>
+```
+
+
+#### 自定义基础SmartForm组件，覆写 getLabel、rules 方法，结合 vue-i18n 等国际化插件可实现组件语言的国际化。
+
+```js
+import * as SmartAntd from 'vue-smart-antdv'
+import { useI18n } from 'vue-i18n';
+
+const i18n = useI18n()
+
+// label 对应formItem组件接收到的label文本
+// key 对应的组件类型 formType
+export const getLabel = (label, key) => {
+  const labelMap = {
+    Input: i18n.t('InputPrefix') + label,
+    Select: i18n.t('SelectPrefix') + label,
+    // ...其它自定义,
+  };
+  return labelMap[key];
+};
+
+// params 对应config里每项formItem组件的配置 可结构取出需要的配置
+export const rules = (params, extra) => {
+  const { items, label, formType, ruleExtra } = params;
+  const message = getLabel(label, formType);
+  return [
+    {
+      required: true,
+      message: label + REQUIRE,
+    },
+    ...(ruleExtra ? ruleExtra : []),
+  ];
+};
+
+// template 修改配置
+<SmartForm :getLabel='getLabel' :rules='rules' v-bind='props'></SmartForm>
+
+// jsx 修改配置
+<SmartForm getLabel={getLabel} rules={rules} {...props}></SmartForm>
 ```
 
 
