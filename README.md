@@ -4,9 +4,11 @@
 ## 组件说明
 
 ```
- 基于 Ant-Design-Vue/Elment-plus 组件的上层简化封装，抹平平台代码差异，只需关注组件的逻辑编写，组件一切原有api依旧支持。
- SmartForm 智能表单组件 实现数据动态配置化生成组件，支持普通数据格式、组件混合配置及以hooks形式配置，以及自定义注册一套符合自己系统的FormType组件显示，实现配置与组件的分离、复用。
+ 基于 Ant-Design-Vue/Elment-plus 组件的上层简化封装，抹平平台代码差异，只需关注组件的逻辑编写，支持组件一切原有api。
+ SmartForm 智能表单组件，用 virtual form 的形式描述组件，实现数据动态配置化生成组件，支持普通数据格式、html模板判断、组件混合及以hooks形式配置，以及自定义注册一套符合自己系统的FormType组件显示，实现配置与组件的分离、复用。
  智能快速生成对应表单，并支持自定义显示修改表单项内容、语言国际化等，供项目使用。
+ 开发时只需关注业务数据实现、无需关注组件本身，对应的form数据配置可以在多处复用、灵活便捷修改。
+ 可以结合服务端使用，将显示内容控制权交给后端。
 ```
 
 
@@ -26,7 +28,7 @@ $ yarn add vue-smart-antdv
   * [VUE](https://github.com/zuniversal/vue-smart-antdv/blob/master/examples/Demo.vue)
 
 
-#### SmartForm 基于 Ant-Design-Vue SmartFormEl 基于 Elment-plus 可根据项目业务选择性使用对应组件
+#### SmartForm 基于 Ant-Design-Vue， SmartFormEl 基于 Elment-plus 可根据项目库使用情况对应选择组件
 
 ```
   import { SmartForm, SmartFormEl } from 'vue-smart-antdv'
@@ -43,14 +45,18 @@ $ yarn add vue-smart-antdv
 ```
 
 
-#### formType 支持显示的 Form 表单组件 自定义注册扩展组件例子在下面
+#### formType 支持显示的 Form 表单组件 自定义注册扩展组件例子在下面 - 不传默认显示使用 Input 组件类型
 
 ```js
+
+  自定义辅助组件：
   rowText// 块文本
   Label// 只显示 label 文本
   CustomCom// 自定义显示内容组件带label
   PlainText// 纯文本
   Divider// 分隔线组件
+
+  内置支持的表单组件：
   Input// 输入框
   InputNumber// 数字输入框
   Password// 密码框
@@ -67,11 +73,11 @@ $ yarn add vue-smart-antdv
   Slider// 滑懂输入条
   Cascader// 级联选择请
   AutoComplete// 自动完成
-  TreeSelect// 属性选择器
+  TreeSelect// 树选择器
 ```
 
 
-#### 最简单的使用方式 如下配置即可生成一个 Input 组件的表单元素
+#### 最简单的使用方式 如下配置即可生成一个 Input 组件的表单元素 virtual form 形式描述
 
 ```jsx
 const dataConfig = [
@@ -391,6 +397,33 @@ export const dataConfig = [
 ```jsx
 import { SmartForm } from 'vue-smart-antdv'
 
+// form 组件绑定初始数据值
+const formStateObj = {
+  input: '15160208888',
+  inputNumber: 8,
+  password: '666',
+  textarea: 'textarea',
+  select: 'usa',
+  search: ['业务员'],
+  switch: false,
+  radio: 'b',
+  radioGroup: 'b',
+  checkbox: ['a', 'b'],
+  // datePicker: undefined,
+  // monthPicker: undefined,
+  // rangePicker: undefined,
+  rate: 2.5,
+  slider: 80,
+  cascader: ['zhejiang', 'hangzhou', 'xihu'],
+  autoComplete: 'Downing Street',
+  treeSelect: 'parent 1-0',
+  customCom: 'CustomComzyb',
+  formItemInput: 888,
+  text: 'text文本',
+  radioGroup2: 'b',
+}
+const formState = reactive(formStateObj);
+
 const useFormConfig = useForm()
 
 <SmartForm {...props} config={dataConfig} init={formState}></SmartForm>
@@ -408,7 +441,7 @@ const useForm = (config = {}) => {
     varLabel.value = '动态Label'
   }, 5000)
   
-  // 当配置项里需要使用到初始数据的变量时，如 自定义formItem数据时，配置项需要写成函数形式 可以接收到 form 的formState数据
+  // 当配置项里需要使用到初始数据的变量时，如 自定义formItem数据、自行绑定 或 使用数据进行展示等时，配置项需要写成函数形式 可以接收到 form 的formState数据
   return ({formState} = {formState: {}}) => ([
     ...dataConfig,// 复用普通数据配置
 
@@ -629,12 +662,10 @@ SmartAntd.(comDefProps、getLabel、rules)
 // 或者按需引入 部分需要修改的配置
 import { 需要的配置项 } from 'vue-smart-antdv'
 
-
 // 自定义修改后要显示的配置 或者部分修改
 const 自定义的配置项 = {
   ...comDefProps,
 }
-
 
 // template 修改配置
 <SmartForm :配置项='自定义的配置项' :config='dataConfig' :init='formState'></SmartForm>
@@ -722,12 +753,49 @@ const getRes = () => {
 ```
 
 
-#### config 配置参数说明 支持数组和函数形式，目前函数形式带有 {formState} 参数 值是父组件传入的 form 表单初始值，可自主决定使用该数据作额外信息显示、绑定等操作
+#### config 配置参数说明 支持数组和函数形式，目前函数形式带有 {formState} 参数， 值是父组件传入的 form 表单初始值，可自主决定使用该数据作额外信息显示、绑定等操作
 
 ```js
   config: {// 组件formItem配置
     type: Array | Function,
     default: [],
+  },
+```
+
+
+#### 主要配置参数 支持透传使用全部的 Form 组件相关属性 参数
+
+```js
+  name: {// 组件name
+    type: String,
+    default: 'smartForm',
+  },
+  config: {// 组件formItem配置
+    type: Array,
+    default: [],
+  },
+  formProps: {// 组件 Form props
+    type: Object,
+    default: {},
+  },
+  formItemLayout: {// 组件 Form 布局
+    type: Object,
+    default: {
+      labelCol: { span: 6 },
+      wrapperCol: { span: 14 },
+    },
+  },
+  init: {// Form 组件 双绑model的初始数据值
+    type: Object,
+    default: {},
+  },
+  isDisabledAll: {// 是否禁用整个表单
+    type: Boolean,
+    default: false,
+  },
+  noRuleAll: {// 是否关闭整个表单rule校验
+    type: Boolean,
+    default: false,
   },
 ```
 
@@ -767,43 +835,6 @@ const getRes = () => {
 ```
 
 
-#### 主要配置参数 支持透传使用全部的 Form 组件相关属性 参数
-
-```js
-  name: {// 组件name
-    type: String,
-    default: 'smartForm',
-  },
-  config: {// 组件formItem配置
-    type: Array,
-    default: [],
-  },
-  formProps: {// 组件 Form props
-    type: Object,
-    default: {},
-  },
-  formItemLayout: {// 组件 Form 布局
-    type: Object,
-    default: {
-      labelCol: { span: 6 },
-      wrapperCol: { span: 14 },
-    },
-  },
-  init: {// 组件 初始数据值
-    type: Object,
-    default: {},
-  },
-  isDisabledAll: {// 是否禁用整个表单
-    type: Boolean,
-    default: false,
-  },
-  noRuleAll: {// 是否关闭整个表单rule校验
-    type: Boolean,
-    default: false,
-  },
-```
-
-
 #### 父组件的事件统一存储放到 eventAttr 对象传递给子组件 SmartForm
 
 ```jsx
@@ -815,6 +846,26 @@ const propsFn = (params) => {
 const eventAttr = {
   propsFn,
 }
+
+// jsx
+<SmartForm eventAttr={eventAttr} config={dataConfig} init={formState}></SmartForm>
+
+// vue
+<SmartForm :eventAttr='eventAttr :config='dataConfig' :init='formState'></SmartForm>
+```
+
+
+#### 可以结合服务端使用，将显示内容控制权交给后端。
+
+```jsx
+const dataConfig = ref([])
+const req = async () => {
+  dataConfi.value = await axios.get('/formConfig')
+}
+
+onMounted(() => {
+  req()
+})
 
 // jsx
 <SmartForm eventAttr={eventAttr} config={dataConfig} init={formState}></SmartForm>
