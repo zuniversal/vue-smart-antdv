@@ -5,10 +5,11 @@
 
 ```
  基于 Ant-Design-Vue/Elment-plus 组件的上层简化封装，抹平平台代码差异，只需关注组件的逻辑编写，支持组件一切原有api。
- SmartForm 智能表单组件，用 virtual form 的形式描述组件，实现数据动态配置化生成组件，支持普通数据格式、html模板判断、组件混合及以hooks形式配置，以及自定义注册一套符合自己系统的FormType组件显示，实现配置与组件的分离、复用。
+ SmartForm 智能动态表单组件，用 virtual form 数据形式描述组件，实现数据动态配置化生成组件，支持普通数据格式、纯html模板片段、组件及集合hooks混合形式配置，在保证快速编写生成便捷性的同时，保留自定义开放性。
+ 可以自定义注册一套符合自己系统的FormType组件显示，实现配置与组件的分离、复用。
  智能快速生成对应表单，并支持自定义显示修改表单项内容、语言国际化等，供项目使用。
  开发时只需关注业务数据实现、无需关注组件本身，对应的form数据配置可以在多处复用、灵活便捷修改。
- 可以结合服务端使用，将显示内容控制权交给后端。
+ 可以结合服务端使用，将显示内容控制交给服务端。
 ```
 
 
@@ -48,7 +49,6 @@ $ yarn add vue-smart-antdv
 #### formType 支持显示的 Form 表单组件 自定义注册扩展组件例子在下面 - 不传默认显示使用 Input 组件类型
 
 ```js
-
   自定义辅助组件：
   rowText// 块文本
   Label// 只显示 label 文本
@@ -77,7 +77,7 @@ $ yarn add vue-smart-antdv
 ```
 
 
-#### 最简单的使用方式 如下配置即可生成一个 Input 组件的表单元素 virtual form 形式描述
+#### 最简单的使用方式 如下一段简单配置数据即可生成一个 Input 组件的表单元素 virtual form 形式描述
 
 ```jsx
 const dataConfig = [
@@ -87,6 +87,49 @@ const dataConfig = [
       name: 'input',
     },
   },
+]
+
+// jsx
+<SmartForm config={dataConfig} init={formState}></SmartForm>
+
+// vue
+<SmartForm :config='dataConfig' :init='formState'></SmartForm>
+```
+
+
+#### hook编写并结合其它hook如useHttp动态获取数据，高频公共组件根据需要在需要复用的地方直接引入对应动态hook表单配置项复用
+
+```jsx
+// useFormItem.jsx
+import useHttp from '@/hooks/useHttp';
+const getSelectList = async () => {} 
+
+export const useSelectForm = props => {
+  // select 下拉框数据源配置
+  // 可以动态替换修改表单项 label 类型等，复用hook
+  const selectList = useHttp(getSelectList);
+
+  return {
+    formType: 'Select',
+    itemProps: {
+      label: 'Select',
+      name: 'select',
+    },
+    comProps: {
+      options: selectList,
+    },
+  };
+};
+```
+
+```jsx
+// FormPage.jsx
+import { useSelectForm } from '@/hooks/useFormItem';
+
+const selectForm = useSelectForm();
+
+const dataConfig = [
+  selectForm,
 ]
 
 // jsx
@@ -443,8 +486,10 @@ const useForm = (config = {}) => {
   
   // 当配置项里需要使用到初始数据的变量时，如 自定义formItem数据、自行绑定 或 使用数据进行展示等时，配置项需要写成函数形式 可以接收到 form 的formState数据
   return ({formState} = {formState: {}}) => ([
-    ...dataConfig,// 复用普通数据配置
+    // 复用普通数据配置
+    ...dataConfig,
 
+    // 修改显示内容
     {
       flexRow: 1,
       formType: 'Search',
@@ -489,6 +534,8 @@ const useForm = (config = {}) => {
         name: 'customCom',
       },
     },
+
+    // 原标签代码形式 灵活自定义显示
     <div class='divCom'>
       vnode
       <a-tag color="red">red</a-tag>
